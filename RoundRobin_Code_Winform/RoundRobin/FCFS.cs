@@ -44,7 +44,7 @@ namespace RoundRobin
             them();
             tientrinh a = hangdoi.Dequeue();
             gant.Clear();
-            gant.Add(new tientrinh(a.TenTienTrinh, a.ThoiGianDen, a.ThoiGianDen, a.ThoiGianXuLy));
+            gant.Add(new tientrinh(a.TenTienTrinh, a.ThoiGianDen, a.ThoiGianDen, a.ThoiGianXuLy+a.ThoiGianDen));
             while (hangdoi.Count != 0)
             {
                 a = hangdoi.Dequeue();

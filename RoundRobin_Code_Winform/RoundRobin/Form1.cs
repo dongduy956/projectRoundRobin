@@ -167,22 +167,28 @@ namespace RoundRobin
                 //thời gian chờ thời gian hoàn tất trung bình roundrobin
                 tinhThoiGian(a.tinhThoiGianChoTB(a.quanTum), a.tinhThoiGianHTTB(a.quanTum));
             }
-        }     
+        }
+        List<tientrinh> ktra(List<tientrinh> Tam,string name)
+        {
+           
+            for (int i = 0; i < Tam.Count; i++)
+                if (name.Equals(Tam[i].TenTienTrinh) == true)
+                {
+                    Tam.RemoveAt(i);
+                    break;
+                }
+            return Tam;
+        }
         private void btndelete_Click(object sender, EventArgs e)
-        {         
+        {
             foreach (ListViewItem item in lwinput.SelectedItems)
             {
                 string name = item.Text;
-                lwinput.Items.Remove(item);            
-                for (int i = 0; i < a.Tam.Count; i++)
-                    if (name.Equals(a.Tam[i].TenTienTrinh) == true)
-                    { a.Tam.RemoveAt(i);
-                        b.Tam.RemoveAt(i);
-                        sjf.Tam.RemoveAt(i);                     
-                        break;
-                    }
-                
-            }           
+                lwinput.Items.Remove(item);
+                a.Tam = ktra(a.Tam,name);
+                b.Tam = ktra(b.Tam,name);
+                sjf.Tam = ktra(sjf.Tam,name);
+            }
                listView1.Items.Clear();
             groupBox4.Controls.Clear();
             lbtgchotb.Text = tghttb.Text = "";
@@ -208,6 +214,7 @@ namespace RoundRobin
 
         private void btnGant_Click(object sender, EventArgs e)
         {
+
             List<tientrinh> l = sjf.xuLyGant();
             if (l == null)
                 MessageBox.Show("Lỗi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);

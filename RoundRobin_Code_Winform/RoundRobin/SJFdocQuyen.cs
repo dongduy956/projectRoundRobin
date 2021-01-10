@@ -35,48 +35,48 @@ namespace RoundRobin
                 gant = value;
             }
         }
-
-        Queue<tientrinh> hangdoi = new Queue<tientrinh>();
         public void add(string ten, int tgden, int tgxuLy)
         {
             tientrinh a = new tientrinh(ten, tgden, tgxuLy);
             tam.Add(a);
         }
         List<tientrinh> gant = new List<tientrinh>();
-        List<tientrinh> ganTam = new List<tientrinh>();
+        Queue<tientrinh> ganTam = new Queue<tientrinh>();
         void them()
         {
             tam = tam.OrderBy(t => t.ThoiGianDen).ToList();
             foreach (tientrinh a in tam)
-                ganTam.Add(a);
+                ganTam.Enqueue(a);
         }
         public List<tientrinh> xuLyGant()
-        {          
-            hangdoi.Clear();
+        {            
             Gant.Clear();
             ganTam.Clear();
             if (tam.Count == 0)
                 return null;
             them();
-           
-            Gant.Add(new tientrinh(tam[0].TenTienTrinh, tam[0].ThoiGianDen, tam[0].ThoiGianDen, tam[0].ThoiGianXuLy));
-            ganTam.RemoveAt(0);
-            ganTam = ganTam.OrderBy(t => t.ThoiGianXuLy).ToList();
-            foreach (tientrinh b in ganTam)
-                hangdoi.Enqueue(b);
-
-            if (hangdoi.Count == 0)
-                return Gant;
-            tientrinh a;
-            while (hangdoi.Count != 0)
-            {
-                a = hangdoi.Dequeue();
-                Gant.Add(new tientrinh(a.TenTienTrinh, Gant[Gant.Count - 1].ThoiGianXuLy, a.ThoiGianDen, Gant[Gant.Count - 1].ThoiGianXuLy + a.ThoiGianXuLy));
+            tientrinh a = ganTam.Dequeue();
+            Gant.Add(new tientrinh(a.TenTienTrinh, a.ThoiGianDen, a.ThoiGianDen, a.ThoiGianXuLy + a.ThoiGianDen));            
+            if (ganTam.Count == 0)
+                return Gant;    
+            List<tientrinh> hangdoiTam = new List<tientrinh>();
+            hangdoiTam.Clear();
+            while (ganTam.Count != 0 && ganTam.Peek().ThoiGianDen <= gant[gant.Count - 1].ThoiGianXuLy)
+                hangdoiTam.Add(ganTam.Dequeue());
+            hangdoiTam = hangdoiTam.OrderBy(t => t.ThoiGianXuLy).ToList();
+            while (hangdoiTam.Count != 0)
+            {           
+                Gant.Add(new tientrinh(hangdoiTam[0].TenTienTrinh, Gant[Gant.Count - 1].ThoiGianXuLy, hangdoiTam[0].ThoiGianDen, Gant[Gant.Count - 1].ThoiGianXuLy + hangdoiTam[0].ThoiGianXuLy));
+                hangdoiTam.RemoveAt(0);
+                while (ganTam.Count != 0 && ganTam.Peek().ThoiGianDen <= gant[gant.Count - 1].ThoiGianXuLy)
+                    hangdoiTam.Add(ganTam.Dequeue());
+                hangdoiTam = hangdoiTam.OrderBy(t => t.ThoiGianXuLy).ToList();
             }
             return Gant;
         }
         public List<tientrinh> tinhThoiChoHT()
         {
+            gant = xuLyGant();
             for (int i = 0; i < Gant.Count; i++)
             {
                 Gant[i].ThoiGianCho = Gant[i].ThoiGianCho - Gant[i].ThoiGianDen;
@@ -85,14 +85,14 @@ namespace RoundRobin
             return Gant;
         }
         public float tinhTGchoTB()
-        {
+        {          
             int tong = 0;
             foreach (tientrinh a in Gant)
                 tong += a.ThoiGianCho;
             return tong / (float)Gant.Count;
         }
         public float tinhTGHTTB()
-        {
+        {          
             int tong = 0;
             foreach (tientrinh a in Gant)
                 tong += a.ThoiGianXuLy;
