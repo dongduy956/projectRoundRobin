@@ -1,0 +1,9 @@
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\bin\Debug\RoundRobin.exe.config
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\bin\Debug\RoundRobin.exe
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\bin\Debug\RoundRobin.pdb
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\obj\Debug\RoundRobin.csprojResolveAssemblyReference.cache
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\obj\Debug\RoundRobin.Form1.resources
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\obj\Debug\RoundRobin.Properties.Resources.resources
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\obj\Debug\RoundRobin.csproj.GenerateResource.Cache
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\obj\Debug\RoundRobin.exe
+C:\Users\Duong Duy\Desktop\github\projectRoundRobin\RoundRobin_Code_Winform\RoundRobin\obj\Debug\RoundRobin.pdb

@@ -23,7 +23,6 @@ namespace RoundRobin
         }
         public void add(string ten1, int tgden1, int tgxuly1)
         {
-
             tientrinh a = new tientrinh(ten1, tgden1, tgxuly1);
             tam.Add(a);
         }

@@ -17,7 +17,8 @@ namespace RoundRobin
             InitializeComponent();
         }
         RoundRobin a = new RoundRobin();
-
+        FCFS b = new FCFS();
+        SJFdocQuyen sjf = new SJFdocQuyen();
         private void btnadd_Click(object sender, EventArgs e)
         {
             bool check = true;
@@ -46,8 +47,9 @@ namespace RoundRobin
                 item1.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = txtgden.Text });
                 item1.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = txBtgxuly.Text });
                 lwinput.Items.Add(item1);
-
                 a.add(txBTen.Text, int.Parse(txtgden.Text), int.Parse(txBtgxuly.Text));
+                b.add(txBTen.Text, int.Parse(txtgden.Text), int.Parse(txBtgxuly.Text));
+                sjf.add(txBTen.Text, int.Parse(txtgden.Text), int.Parse(txBtgxuly.Text));
                 txBquarium.Enabled = true;
                 txBTen.Text = txtgden.Text = txBtgxuly.Text = "";
             }
@@ -76,8 +78,8 @@ namespace RoundRobin
             if (txtgden.Text != "" && txBTen.Text != "" && txBtgxuly.Text != "")
                 btnadd.Enabled = true;
         }
-        List<tientrinh> gant = new List<tientrinh>();
-        List<tientrinh> tghtcho = new List<tientrinh>();
+        List<tientrinh> gantRoundRobin = new List<tientrinh>();
+        List<tientrinh> outPutRR = new List<tientrinh>();
 
         private void btnaddtg_Click(object sender, EventArgs e)
         {
@@ -105,66 +107,67 @@ namespace RoundRobin
             else
                 btnaddtg.Enabled = false;
         }
+        void veGant(List<tientrinh> gant)
+        {            
+            groupBox4.Text = "GANT";
+            groupBox4.Visible = true;
+            int x = 16;
+            Label lb1 = new Label();
+            lb1.Text = gant[0].ThoiGianCho.ToString();
+            lb1.Size = new System.Drawing.Size(36, 20);
+            lb1.Location = new Point(10, 48);
+            groupBox4.Controls.Add(lb1);
+            Random rnd = new Random();
+            for (int i = 0; i < gant.Count; i++)
+            {
+                Button btn = new Button();
+                btn.AutoSize = true;
+                Color rand = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                btn.BackColor = rand;
+                btn.Text = gant[i].TenTienTrinh;
+                btn.Size = new System.Drawing.Size(36, 20);
+                btn.Location = new Point(x, 22);
+                x += btn.Size.Width - 1;
+                Label lb = new Label();
+                lb.Text = gant[i].ThoiGianXuLy.ToString();
+                lb.Size = new System.Drawing.Size(36, 20);
+                lb.Location = new Point(btn.Location.X + 27, 48);
+                groupBox4.Controls.Add(btn);
+                groupBox4.Controls.Add(lb);
+            }
+        }
+        void output(List<tientrinh> output)
+        {           
+            listView1.View = View.Details;
+            for (int i = 0; i < output.Count; i++)
+            {
+                ListViewItem item1 = new ListViewItem();
+                item1.Text = output[i].TenTienTrinh;
+                item1.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = output[i].ThoiGianCho.ToString() });
+                item1.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = output[i].ThoiGianXuLy.ToString() });
+                listView1.Items.Add(item1);
+            }
+        }
+        void tinhThoiGian(float tgcho,float tght)
+        {
+            tghttb.Text = tght.ToString();
+            lbtgchotb.Text = tgcho.ToString();
 
+        }
         private void BTSUMIT_Click(object sender, EventArgs e)
         {
             if (a.quanTum == -1 || a.xuLy(a.quanTum) == null)
                 MessageBox.Show("Lỗi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                tghtcho = a.thoigianhtcho(a.quanTum);
-                gant = a.xuLy(a.quanTum);
-                listView1.View = View.Details;
-                for (int i = 0; i < tghtcho.Count; i++)
-                {
-                    ListViewItem item1 = new ListViewItem();
-                    item1.Text = tghtcho[i].TenTienTrinh;
-                    item1.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = tghtcho[i].ThoiGianCho.ToString() });
-                    item1.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = tghtcho[i].ThoiGianXuLy.ToString() });
-                    listView1.Items.Add(item1);
-                }
-                tghttb.Text = a.tinhThoiGianHTTB(int.Parse(txBquarium.Text)).ToString();
-                lbtgchotb.Text = a.tinhThoiGianChoTB(int.Parse(txBquarium.Text)).ToString();
+                //output roundRobin
+                output(a.thoigianhtcho(a.quanTum));
+                // biểu đồ gantRoundRobin
+                veGant(a.xuLy(a.quanTum));
+                //thời gian chờ thời gian hoàn tất trung bình roundrobin
+                tinhThoiGian(a.tinhThoiGianChoTB(a.quanTum), a.tinhThoiGianHTTB(a.quanTum));
             }
-        }
-
-        private void btnGant_Click(object sender, EventArgs e)
-        {
-            if (a.quanTum == -1 || a.xuLy(a.quanTum) == null)
-                MessageBox.Show("Lỗi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-            {
-                  
-                gant = a.xuLy(a.quanTum);
-                groupBox4.Text = "GANT";
-                groupBox4.Visible = true;
-                int x = 16;
-                Label lb1 = new Label();
-                lb1.Text = gant[0].ThoiGianCho.ToString();
-                lb1.Size = new System.Drawing.Size(36, 20);
-                lb1.Location = new Point(10, 48);
-                groupBox4.Controls.Add(lb1);
-                Random rnd = new Random();
-                for (int i = 0; i < gant.Count; i++)
-                {                  
-                    Button btn = new Button();
-                    btn.AutoSize = true;
-                    Color rand = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));                 
-                    btn.BackColor = rand ;                    
-                    btn.Text = gant[i].TenTienTrinh;
-                    btn.Size = new System.Drawing.Size(36, 20);
-                    btn.Location = new Point(x, 22);
-                    x += btn.Size.Width - 1;
-                    Label lb = new Label();
-                    lb.Text = gant[i].ThoiGianXuLy.ToString();
-                    lb.Size = new System.Drawing.Size(36, 20);
-                    lb.Location = new Point(btn.Location.X + 27, 48);
-                    groupBox4.Controls.Add(btn);
-                    groupBox4.Controls.Add(lb);
-                }
-            }
-        }
-
+        }     
         private void btndelete_Click(object sender, EventArgs e)
         {         
             foreach (ListViewItem item in lwinput.SelectedItems)
@@ -173,7 +176,12 @@ namespace RoundRobin
                 lwinput.Items.Remove(item);            
                 for (int i = 0; i < a.Tam.Count; i++)
                     if (name.Equals(a.Tam[i].TenTienTrinh) == true)
-                    { a.Tam.RemoveAt(i); break; }
+                    { a.Tam.RemoveAt(i);
+                        b.Tam.RemoveAt(i);
+                        sjf.Tam.RemoveAt(i);                     
+                        break;
+                    }
+                
             }           
                listView1.Items.Clear();
             groupBox4.Controls.Clear();
@@ -181,6 +189,37 @@ namespace RoundRobin
             groupBox4.Text = "";
             groupBox4.Visible = false;
         }
+        List<tientrinh> gantFCFS = new List<tientrinh>();
+    
+        private void button1_Click(object sender, EventArgs e)
+        {            
+            if (b.xuLyGant() == null)
+                MessageBox.Show("Lỗi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                //biểu đồ gant fcfs
+                veGant(b.xuLyGant());
+                //output
+                output(b.tinhThoiChoHT());
+                //tính thời gian hoàn thành và chờ trung bình
+                tinhThoiGian(b.tinhTGchoTB(), b.tinhTGHTTB());
+            }
+        }
 
+        private void btnGant_Click(object sender, EventArgs e)
+        {
+            List<tientrinh> l = sjf.xuLyGant();
+            if (l == null)
+                MessageBox.Show("Lỗi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                //biểu đồ gant fcfs
+                veGant(l);
+                //output
+                output(sjf.tinhThoiChoHT());
+                //tính thời gian hoàn thành và chờ trung bình
+                tinhThoiGian(sjf.tinhTGchoTB(), sjf.tinhTGHTTB());
+            }
+        }
     }
 }
